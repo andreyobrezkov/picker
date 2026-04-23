@@ -1,6 +1,6 @@
 import styles from './WinnerModal.module.css'
 
-export default function WinnerModal({ winner, onClose }) {
+export default function WinnerModal({ winner, onClose, onSpinAgain }) {
   if (!winner) return null
 
   return (
@@ -23,7 +23,10 @@ export default function WinnerModal({ winner, onClose }) {
         <h2 className={styles.label}>{winner.label}</h2>
         {winner.subtitle && <p className={styles.subtitle}>{winner.subtitle}</p>}
         <div className={styles.colorBar} />
-        <button className={styles.btn} onClick={onClose}>Spin again</button>
+        <div className={styles.actions}>
+          <button className={styles.btn} onClick={onSpinAgain}>Spin again</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={onClose}>OK</button>
+        </div>
       </div>
     </div>
   )

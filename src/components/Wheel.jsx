@@ -1,10 +1,15 @@
 import { useRef, useEffect, useCallback, useState, useLayoutEffect } from 'react'
+import { DEFAULT_SPIN_SPEED, SPIN_SPEED_TIMING } from '../utils/spinSpeeds.js'
 import styles from './Wheel.module.css'
 
 const TAU = Math.PI * 2
 
 function easeOut(t) {
   return 1 - Math.pow(1 - t, 4)
+}
+
+function randomBetween(min, max) {
+  return min + Math.random() * (max - min)
 }
 
 function buildArcs(segments) {
@@ -89,11 +94,13 @@ function drawSegmentContent(ctx, seg, midR, r, images) {
   ctx.shadowBlur = 0
 }
 
-export default function Wheel({ segments, onResult }) {
+export default function Wheel({ segments, onResult, spinSpeed, spinRequestId }) {
   const canvasRef = useRef(null)
   const wrapperRef = useRef(null)
   const onResultRef = useRef(onResult)
+  const spinSpeedRef = useRef(spinSpeed)
   useLayoutEffect(() => { onResultRef.current = onResult }, [onResult])
+  useLayoutEffect(() => { spinSpeedRef.current = spinSpeed }, [spinSpeed])
 
   const stateRef = useRef({ rotation: 0, spinning: false, arcs: [], images: {}, animId: null })
   const [isSpinning, setIsSpinning] = useState(false)
@@ -170,10 +177,12 @@ export default function Wheel({ segments, onResult }) {
     state.spinning = true
     setIsSpinning(true)
 
-    const extraTurns = (5 + Math.random() * 5) * TAU
+    const speed = spinSpeedRef.current ?? DEFAULT_SPIN_SPEED
+    const timing = SPIN_SPEED_TIMING[speed] ?? SPIN_SPEED_TIMING[DEFAULT_SPIN_SPEED]
+    const extraTurns = randomBetween(timing.extraTurns[0], timing.extraTurns[1]) * TAU
     const targetOffset = Math.random() * TAU
     const totalRotation = extraTurns + targetOffset
-    const duration = 4000 + Math.random() * 1500
+    const duration = randomBetween(timing.duration[0], timing.duration[1])
     const startRotation = state.rotation
     const startTime = performance.now()
 
@@ -194,6 +203,10 @@ export default function Wheel({ segments, onResult }) {
 
     state.animId = requestAnimationFrame(frame)
   }, [])
+
+  useEffect(() => {
+    if (spinRequestId > 0) spin()
+  }, [spinRequestId, spin])
 
   return (
     <div className={styles.outer}>

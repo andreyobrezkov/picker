@@ -1,4 +1,7 @@
 .page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   padding: 8px 0 48px;
   max-width: 720px;
 }
@@ -103,6 +106,26 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--on-surface);
+}
+
+.optionCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 180px;
+}
+
+.optionTitle {
+  font-family: 'Spline Sans', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.optionDesc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--on-surface-variant);
 }
 
 .check {

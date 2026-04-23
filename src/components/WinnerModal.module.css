@@ -91,6 +91,11 @@
   opacity: 0.6;
 }
 
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
 .btn {
   background: var(--primary);
   color: #fff;
@@ -104,8 +109,20 @@
   transition: opacity 0.15s, transform 0.1s;
 }
 
+.btnSecondary {
+  background: transparent;
+  color: var(--on-surface);
+  border: 1px solid var(--outline-variant);
+}
+
 .btn:hover { opacity: 0.88; }
 .btn:active { transform: scale(0.97); }
+
+@media (max-width: 420px) {
+  .actions {
+    flex-direction: column;
+  }
+}
 
 @keyframes fadeIn {
   from { opacity: 0 }

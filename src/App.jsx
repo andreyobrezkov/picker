@@ -5,6 +5,7 @@ import WinnerModal from './components/WinnerModal.jsx'
 import Settings from './components/Settings.jsx'
 import { parseSegments } from './utils/parseSegments.js'
 import defaultSegments from './utils/defaultSegments.js'
+import { DEFAULT_SPIN_SPEED } from './utils/spinSpeeds.js'
 import { themeById, DEFAULT_THEME } from './utils/themes.js'
 import styles from './App.module.css'
 
@@ -29,6 +30,8 @@ export default function App() {
   const [page, setPage] = useState('spin')
   const [segments, setSegments] = useState(defaultSegments)
   const [themeId, setThemeId] = useState(DEFAULT_THEME)
+  const [spinSpeed, setSpinSpeed] = useState(DEFAULT_SPIN_SPEED)
+  const [spinRequestId, setSpinRequestId] = useState(0)
   const [removeAfterWin, setRemoveAfterWin] = useState(false)
   const [winner, setWinner] = useState(null)
   const [error, setError] = useState(null)
@@ -81,6 +84,15 @@ export default function App() {
     }
   }, [removeAfterWin])
 
+  const handleCloseWinner = useCallback(() => {
+    setWinner(null)
+  }, [])
+
+  const handleSpinAgain = useCallback(() => {
+    setWinner(null)
+    setSpinRequestId(prev => prev + 1)
+  }, [])
+
   const downloadExample = () => {
     const blob = new Blob([EXAMPLE_JSON], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
@@ -124,11 +136,21 @@ export default function App() {
         )}
 
         {page === 'settings' ? (
-          <Settings selectedTheme={themeId} onSelectTheme={setThemeId} />
+          <Settings
+            selectedTheme={themeId}
+            onSelectTheme={setThemeId}
+            spinSpeed={spinSpeed}
+            onSpinSpeedChange={setSpinSpeed}
+          />
         ) : (
           <div className={styles.grid}>
             <div className={styles.wheelCol}>
-              <Wheel segments={activeSegments} onResult={handleResult} />
+              <Wheel
+                segments={activeSegments}
+                onResult={handleResult}
+                spinSpeed={spinSpeed}
+                spinRequestId={spinRequestId}
+              />
               <div className={styles.tagline}>
                 <h1 className={styles.taglineHead}>Spin to Decide</h1>
                 <p className={styles.taglineBody}>
@@ -153,7 +175,7 @@ export default function App() {
         )}
       </main>
 
-      <WinnerModal winner={winner} onClose={() => setWinner(null)} />
+      <WinnerModal winner={winner} onClose={handleCloseWinner} onSpinAgain={handleSpinAgain} />
     </div>
   )
 }
