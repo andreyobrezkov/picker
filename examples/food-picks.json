@@ -1,0 +1,14 @@
+[
+  { "id": "1", "label": "Burgers", "subtitle": "", "color": null, "emoji": "🍔", "icon": null, "weight": 1, "enabled": true },
+  { "id": "2", "label": "Pizza", "subtitle": "", "color": null, "emoji": "🍕", "icon": null, "weight": 1, "enabled": true },
+  { "id": "3", "label": "Noodles", "subtitle": "", "color": null, "emoji": "🍜", "icon": null, "weight": 1, "enabled": true },
+  { "id": "4", "label": "Dumplings", "subtitle": "", "color": null, "emoji": "🥟", "icon": null, "weight": 1, "enabled": true },
+  { "id": "5", "label": "Poke Bowl", "subtitle": "", "color": null, "emoji": "🥗", "icon": null, "weight": 1, "enabled": true },
+  { "id": "6", "label": "Tacos", "subtitle": "", "color": null, "emoji": "🌮", "icon": null, "weight": 1, "enabled": true },
+  { "id": "7", "label": "Sushi", "subtitle": "", "color": null, "emoji": "🍣", "icon": null, "weight": 1, "enabled": true },
+  { "id": "8", "label": "Fried Chicken", "subtitle": "", "color": null, "emoji": "🍗", "icon": null, "weight": 1, "enabled": true },
+  { "id": "9", "label": "Ramen", "subtitle": "", "color": null, "emoji": "🍜", "icon": null, "weight": 1, "enabled": true },
+  { "id": "10", "label": "Burritos", "subtitle": "", "color": null, "emoji": "🌯", "icon": null, "weight": 1, "enabled": true },
+  { "id": "11", "label": "Hot Dogs", "subtitle": "", "color": null, "emoji": "🌭", "icon": null, "weight": 1, "enabled": true },
+  { "id": "12", "label": "Salads", "subtitle": "", "color": null, "emoji": "🥙", "icon": null, "weight": 1, "enabled": true }
+]

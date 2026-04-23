@@ -5,7 +5,18 @@
       "Bash(echo \"EXIT:$?\")",
       "Bash(npm install *)",
       "Bash(npm run *)",
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "Bash(node_modules/.bin/vite build *)",
+      "Bash(netstat -ano)",
+      "Bash(findstr :5173)",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(curl -v http://localhost:5173/)",
+      "Bash(wmic process *)",
+      "Bash(curl -v http://127.0.0.1:5173/)",
+      "Bash(curl -s \"http://[::1]:5173/src/main.jsx\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://[::1]:5173/index.html\")",
+      "Bash(taskkill /PID 29592 /F)",
+      "Bash(curl -s \"http://localhost:5173/\")"
     ]
   }
 }

@@ -57,6 +57,15 @@ export default function App() {
     handleFile(e.dataTransfer.files[0])
   }
 
+  const handleAdd = useCallback((data) => {
+    setSegments(prev => [...prev, {
+      ...data,
+      id: crypto.randomUUID(),
+      emoji: null,
+      enabled: true,
+    }])
+  }, [])
+
   const handleDelete = useCallback((id) => {
     setSegments(prev => prev.filter(s => s.id !== id))
   }, [])
@@ -137,6 +146,7 @@ export default function App() {
                 onToggleEnabled={handleToggleEnabled}
                 onUpload={handleUpload}
                 onDownloadExample={downloadExample}
+                onAdd={handleAdd}
               />
             </div>
           </div>
