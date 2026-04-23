@@ -84,10 +84,16 @@ npm run preview
 
 ## JSON Format
 
-The importer accepts either:
+The preferred upload format is a root object with picker-level settings plus a `segments` array. Legacy plain arrays are still accepted and fall back to the default app settings.
 
-- an array of segment objects, or
-- an object with a `segments` array
+### Root Fields
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `picker_name` | string | No | Changes the name shown in the top-left app header |
+| `remove_after_win` | boolean | No | Sets whether winners are disabled automatically after a spin |
+| `spin_speed` | string | No | Must be `slow`, `normal`, or `fast` |
+| `segments` | array | Yes for object uploads | List of segment objects |
 
 ### Supported Fields
 
@@ -99,32 +105,40 @@ The importer accepts either:
 | `emoji` | string | No | Used when no image is provided |
 | `color` | string | No | Hex or CSS color string; overrides the selected theme for that segment |
 | `weight` | number | No | Relative probability; values `> 0` are used, otherwise the app falls back to `1` |
+| `enabled` | boolean | No | Controls whether the segment starts enabled in the list and wheel |
 
 ### Example
 
 ```json
-[
-  {
-    "label": "Alice Chen",
-    "subtitle": "Engineering",
-    "icon": "https://i.pravatar.cc/150?img=1",
-    "weight": 1
-  },
-  {
-    "label": "Bob Torres",
-    "subtitle": "Product",
-    "emoji": "📦",
-    "color": "#0077b6",
-    "weight": 2
-  }
-]
+{
+  "picker_name": "Team Picker",
+  "remove_after_win": true,
+  "spin_speed": "normal",
+  "segments": [
+    {
+      "label": "Alice Chen",
+      "subtitle": "Engineering",
+      "icon": "https://i.pravatar.cc/150?img=1",
+      "weight": 1,
+      "enabled": true
+    },
+    {
+      "label": "Bob Torres",
+      "subtitle": "Product",
+      "emoji": "📦",
+      "color": "#0077b6",
+      "weight": 2,
+      "enabled": false
+    }
+  ]
+}
 ```
 
 ## Current Import Behavior
 
 - `label` is the only required field.
-- Imported segments are enabled by default.
-- The current parser does not read an `enabled` flag from JSON.
+- Imported segments respect `enabled` when provided and default to enabled otherwise.
+- Root-level picker settings are applied on upload when present.
 - If the JSON is invalid, or no valid segment array is found, the app shows an error banner.
 
 ## Notes

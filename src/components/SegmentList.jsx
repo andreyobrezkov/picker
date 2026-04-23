@@ -209,7 +209,7 @@ export default function SegmentList({
 
       {/* Footer */}
       <button className={styles.exampleBtn} onClick={onDownloadExample}>
-        Download example JSON
+        Download current JSON
       </button>
     </section>
   )

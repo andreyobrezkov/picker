@@ -3,20 +3,11 @@ import Wheel from './components/Wheel.jsx'
 import SegmentList from './components/SegmentList.jsx'
 import WinnerModal from './components/WinnerModal.jsx'
 import Settings from './components/Settings.jsx'
-import { parseSegments } from './utils/parseSegments.js'
+import { DEFAULT_PICKER_NAME, parseSegments } from './utils/parseSegments.js'
 import defaultSegments from './utils/defaultSegments.js'
 import { DEFAULT_SPIN_SPEED } from './utils/spinSpeeds.js'
 import { themeById, DEFAULT_THEME } from './utils/themes.js'
 import styles from './App.module.css'
-
-const EXAMPLE_JSON = JSON.stringify([
-  { label: 'Alice Chen',  subtitle: 'Engineering', icon: 'https://i.pravatar.cc/150?img=1'  },
-  { label: 'Bob Torres',  subtitle: 'Product',     icon: 'https://i.pravatar.cc/150?img=12' },
-  { label: 'Carol Kim',   subtitle: 'Design',      icon: 'https://i.pravatar.cc/150?img=5'  },
-  { label: 'David Park',  subtitle: 'Engineering', icon: 'https://i.pravatar.cc/150?img=15', color: '#0077b6' },
-  { label: 'Eve Santos',  subtitle: 'QA',          icon: 'https://i.pravatar.cc/150?img=9'  },
-  { label: 'Frank Müller', subtitle: 'DevOps',     icon: 'https://i.pravatar.cc/150?img=33' },
-], null, 2)
 
 function applyTheme(segments, themeId) {
   const palette = themeById[themeId]?.colors ?? themeById[DEFAULT_THEME].colors
@@ -29,6 +20,7 @@ function applyTheme(segments, themeId) {
 export default function App() {
   const [page, setPage] = useState('spin')
   const [segments, setSegments] = useState(defaultSegments)
+  const [pickerName, setPickerName] = useState(DEFAULT_PICKER_NAME)
   const [themeId, setThemeId] = useState(DEFAULT_THEME)
   const [spinSpeed, setSpinSpeed] = useState(DEFAULT_SPIN_SPEED)
   const [spinRequestId, setSpinRequestId] = useState(0)
@@ -46,7 +38,10 @@ export default function App() {
     setError(null)
     try {
       const parsed = await parseSegments(file)
-      setSegments(parsed)
+      setSegments(parsed.segments)
+      setPickerName(parsed.pickerName)
+      setRemoveAfterWin(parsed.removeAfterWin)
+      setSpinSpeed(parsed.spinSpeed)
     } catch (e) {
       setError(e.message)
     }
@@ -94,11 +89,30 @@ export default function App() {
   }, [])
 
   const downloadExample = () => {
-    const blob = new Blob([EXAMPLE_JSON], { type: 'application/json' })
+    const payload = {
+      picker_name: pickerName,
+      remove_after_win: removeAfterWin,
+      spin_speed: spinSpeed,
+      segments: segments.map(({ label, subtitle, color, icon, emoji, weight, enabled }) => ({
+        label,
+        subtitle,
+        color,
+        icon,
+        emoji,
+        weight,
+        enabled,
+      })),
+    }
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'example-segments.json'
+    const safeName = (pickerName || DEFAULT_PICKER_NAME)
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'picker'
+    a.download = `${safeName}.json`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -106,7 +120,7 @@ export default function App() {
   return (
     <div className={styles.root}>
       <header className={styles.header}>
-        <span className={styles.brand}>Picker</span>
+        <span className={styles.brand}>{pickerName}</span>
         <nav className={styles.nav}>
           {['spin', 'settings'].map(p => (
             <button
