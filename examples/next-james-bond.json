@@ -1,0 +1,15 @@
+{
+  "picker_name": "Next James Bond",
+  "remove_after_win": true,
+  "spin_speed": "normal",
+  "segments": [
+    { "label": "Aaron Taylor-Johnson", "subtitle": "Rumored frontrunner", "icon": "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcQk0Q_wvUAOxNfdeWjg-LR4pJZNnfvnEdhyu6h1CAe85neAKZhy0AABoUoXyeXdj9OvUvfUBjfEq48sosI", "enabled": true },
+    { "label": "Callum Turner", "subtitle": "Recent shortlist favorite", "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGW2PoIj_YMuDEMsi2UoR51jD_SIRbwkZr_jtkoRYJPHC10VuJWzKtkiowEjbqXpCkz2fT5p8ERYJERl4LxADWMU_-h4ADUQagCseDV6RP&s=10", "enabled": true },
+    { "label": "Harris Dickinson", "subtitle": "Frequently mentioned contender", "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZXq_Y2Ci_QvfeS7Id5kilgATqC4_00vW7x-nMP2TX4uLtF2taV0-2URMoinGZjZVYaUj-QAyK83CGMzdJA40nXSwuC-PO1IXYvy6bWG7A&s=10", "enabled": true },
+    { "label": "Henry Cavill", "subtitle": "Longtime fan pick", "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSut1NCfxSxzhUtwLKbBR23kQC-AXomx4qjhuL9vbnyDwaieeAVj-IJLuHHEAVcGTdk3ESfG4QCEEKsbLFgPpGMC_-c_EEUpMN08W1M0VGu&s=10", "enabled": true },
+    { "label": "Jacob Elordi", "subtitle": "Younger reboot option", "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAvAW2N2Q_IysoURFVDyIy_ni5bDbGQ-1xuL58kWdd6aRx7vasaQxH6VPbIsoVnXppECoRPLhG2hJfluVYk2Zxi8inaHSSlzPuskDLEwEr7w&s=10", "enabled": true },
+    { "label": "James Norton", "subtitle": "Classic Bond profile", "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5-IkaFztIrWfdzgbHZcmNEAAnHeELk63VF-_6pqfczSep3Uv2QOfY70caFKlu26K-CEPUFS_RwnmIKmzPO9h3DA7sgan1ZX4wqxfEWJbUhA&s=10", "enabled": true },
+    { "label": "Sope Dirisu", "subtitle": "Serious dramatic option", "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtmOoSr8X-L55zfFGwJKv-Bk7g-rbFK5Bjm0Qvc-88nyLRio733CDocp9FGxRsmn5mQN9b2l9DZpxmSkuIUZRnuqgdRcvGNVdCsrKylLBC&s=10", "enabled": true },
+    { "label": "Tom Hardy", "subtitle": "Veteran wildcard pick", "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWJOMp2ptTOCPvhCjOYK1uguOwQOiwF6wClj2pqvPrLHXaR4iNAJ68yok_pTMs87rHonzylDJq8tUn_3IbgC_y7aPbWTxzbMgaa6HbgL6g&s=10", "enabled": true }
+  ]
+}

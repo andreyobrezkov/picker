@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Wheel from './components/Wheel.jsx'
 import SegmentList from './components/SegmentList.jsx'
 import WinnerModal from './components/WinnerModal.jsx'
@@ -9,6 +9,83 @@ import { DEFAULT_SPIN_SPEED } from './utils/spinSpeeds.js'
 import { themeById, DEFAULT_THEME } from './utils/themes.js'
 import styles from './App.module.css'
 
+const PICKER_STATE_STORAGE_KEY = 'picker:state'
+const LEGACY_SEGMENTS_STORAGE_KEY = 'picker:segments'
+const LEGACY_PICKER_NAME_STORAGE_KEY = 'picker:name'
+
+function normalizeStoredSegments(parsed) {
+  if (!Array.isArray(parsed)) {
+    return null
+  }
+
+  const segments = parsed
+    .filter(item => typeof item?.label === 'string' && item.label.trim())
+    .map((item, index) => ({
+      id: typeof item.id === 'string' && item.id.trim() ? item.id : `stored-${index}`,
+      label: item.label.trim(),
+      subtitle: typeof item.subtitle === 'string' ? item.subtitle.trim() : '',
+      color: typeof item.color === 'string' && item.color.trim() ? item.color.trim() : null,
+      icon: typeof item.icon === 'string' && item.icon.trim() ? item.icon.trim() : null,
+      emoji: typeof item.emoji === 'string' && item.emoji.trim() ? item.emoji.trim() : null,
+      weight: typeof item.weight === 'number' && item.weight > 0 ? item.weight : 1,
+      enabled: typeof item.enabled === 'boolean' ? item.enabled : true,
+    }))
+
+  return segments.length > 0 ? segments : null
+}
+
+function normalizeStoredPickerName(value) {
+  if (typeof value !== 'string') {
+    return DEFAULT_PICKER_NAME
+  }
+
+  const trimmed = value.trim()
+  return trimmed || DEFAULT_PICKER_NAME
+}
+
+function normalizeStoredSpinSpeed(value) {
+  return value === 'slow' || value === 'normal' || value === 'fast'
+    ? value
+    : DEFAULT_SPIN_SPEED
+}
+
+function loadStoredState() {
+  const raw = window.localStorage.getItem(PICKER_STATE_STORAGE_KEY)
+  if (raw != null) {
+    try {
+      const parsed = JSON.parse(raw)
+      const segments = normalizeStoredSegments(parsed?.segments)
+      if (segments) {
+        return {
+          segments,
+          pickerName: normalizeStoredPickerName(parsed?.picker_name),
+          removeAfterWin: typeof parsed?.remove_after_win === 'boolean' ? parsed.remove_after_win : false,
+          spinSpeed: normalizeStoredSpinSpeed(parsed?.spin_speed),
+        }
+      }
+    } catch {
+      // Fall through to defaults and legacy keys
+    }
+  }
+
+  let legacySegments = null
+  const legacySegmentsRaw = window.localStorage.getItem(LEGACY_SEGMENTS_STORAGE_KEY)
+  if (legacySegmentsRaw != null) {
+    try {
+      legacySegments = normalizeStoredSegments(JSON.parse(legacySegmentsRaw))
+    } catch {
+      legacySegments = null
+    }
+  }
+
+  return {
+    segments: legacySegments ?? defaultSegments,
+    pickerName: normalizeStoredPickerName(window.localStorage.getItem(LEGACY_PICKER_NAME_STORAGE_KEY)),
+    removeAfterWin: false,
+    spinSpeed: DEFAULT_SPIN_SPEED,
+  }
+}
+
 function applyTheme(segments, themeId) {
   const palette = themeById[themeId]?.colors ?? themeById[DEFAULT_THEME].colors
   return segments.map((seg, i) => ({
@@ -18,13 +95,14 @@ function applyTheme(segments, themeId) {
 }
 
 export default function App() {
+  const [storedState] = useState(loadStoredState)
   const [page, setPage] = useState('spin')
-  const [segments, setSegments] = useState(defaultSegments)
-  const [pickerName, setPickerName] = useState(DEFAULT_PICKER_NAME)
+  const [segments, setSegments] = useState(storedState.segments)
+  const [pickerName, setPickerName] = useState(storedState.pickerName)
   const [themeId, setThemeId] = useState(DEFAULT_THEME)
-  const [spinSpeed, setSpinSpeed] = useState(DEFAULT_SPIN_SPEED)
+  const [spinSpeed, setSpinSpeed] = useState(storedState.spinSpeed)
   const [spinRequestId, setSpinRequestId] = useState(0)
-  const [removeAfterWin, setRemoveAfterWin] = useState(false)
+  const [removeAfterWin, setRemoveAfterWin] = useState(storedState.removeAfterWin)
   const [winner, setWinner] = useState(null)
   const [error, setError] = useState(null)
   const [dragging, setDragging] = useState(false)
@@ -32,6 +110,15 @@ export default function App() {
   // Resolve theme colours — JSON colour wins when present, theme fills the rest
   const resolvedSegments = applyTheme(segments, themeId)
   const activeSegments = resolvedSegments.filter(s => s.enabled)
+
+  useEffect(() => {
+    window.localStorage.setItem(PICKER_STATE_STORAGE_KEY, JSON.stringify({
+      picker_name: pickerName,
+      remove_after_win: removeAfterWin,
+      spin_speed: spinSpeed,
+      segments,
+    }))
+  }, [pickerName, removeAfterWin, spinSpeed, segments])
 
   const handleFile = useCallback(async (file) => {
     if (!file) return

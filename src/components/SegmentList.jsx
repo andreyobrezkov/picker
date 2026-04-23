@@ -21,6 +21,7 @@ export default function SegmentList({
   }
 
   const cancel = () => { setForm(EMPTY); setShowForm(false); setError('') }
+  const sortedSegments = [...segments].sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -72,7 +73,7 @@ export default function SegmentList({
 
       {/* Segment list */}
       <ul className={styles.list}>
-        {segments.map((seg) => (
+        {sortedSegments.map((seg) => (
           <li key={seg.id} className={`${styles.item} ${!seg.enabled ? styles.itemDisabled : ''}`}>
             {seg.icon ? (
               <div className={styles.avatarWrap} style={{ opacity: seg.enabled ? 1 : 0.4 }}>

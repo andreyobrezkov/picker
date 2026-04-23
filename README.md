@@ -1,6 +1,8 @@
 # Picker
 
-Picker is a small React + Vite app for running a spin-the-wheel selection flow. You can load entries from JSON, add entries manually in the UI, assign weights and colors, and pick a winner with an animated canvas wheel.
+Picker is a small React + Vite app for running a spin-the-wheel selection flow. You can load entries from JSON, add entries manually in the UI, assign weights and colors, persist the picker state locally, and pick a winner with an animated canvas wheel.
+
+![Picker UI](./ui.png)
 
 ## What It Does
 
@@ -10,6 +12,9 @@ Picker is a small React + Vite app for running a spin-the-wheel selection flow. 
 - Supports optional subtitle, emoji, image URL, custom color, and weight per segment
 - Includes switchable wheel color themes
 - Can automatically disable a winner after each spin
+- Persists upload-compatible picker state in local storage
+- Downloads the current picker state as reusable JSON
+- Shows segments alphabetically in the configuration list
 - Starts with a built-in sample list so the app is usable immediately
 
 ## Tech Stack
@@ -71,6 +76,28 @@ yarn build
 npm run preview
 ```
 
+## Run With Docker
+
+Build and start the containerized app:
+
+```bash
+npm run docker:up
+```
+
+Stop it:
+
+```bash
+npm run docker:down
+```
+
+Tail container logs:
+
+```bash
+npm run docker:logs
+```
+
+The app will be available at `http://localhost:4173`.
+
 ## How To Use
 
 1. Open the app and stay on the `Spin` page.
@@ -78,9 +105,10 @@ npm run preview
    - uploading a JSON file,
    - dragging a JSON file into the page,
    - or adding segments manually.
-3. Optionally enable `Remove after win` if winners should be disabled after selection.
-4. Open `Settings` to choose a wheel palette.
-5. Press `SPIN`.
+3. Use `Download current JSON` to export the current picker state for later re-upload.
+4. Optionally enable `Remove after win` if winners should be disabled after selection.
+5. Open `Settings` to choose a wheel palette and spin speed.
+6. Press `SPIN`.
 
 ## JSON Format
 
@@ -139,13 +167,30 @@ The preferred upload format is a root object with picker-level settings plus a `
 - `label` is the only required field.
 - Imported segments respect `enabled` when provided and default to enabled otherwise.
 - Root-level picker settings are applied on upload when present.
+- Downloaded JSON uses the same schema as uploaded JSON.
 - If the JSON is invalid, or no valid segment array is found, the app shows an error banner.
+
+## Persistence
+
+- The app stores the same root-level state the upload JSON supports in `localStorage`:
+  - `picker_name`
+  - `remove_after_win`
+  - `spin_speed`
+  - `segments`
+- If saved state exists, the app restores it on load.
+- If no saved state exists, the app starts with the built-in defaults.
 
 ## Notes
 
 - Remote avatar/image URLs should allow cross-origin loading, otherwise the wheel will render the segment without the image.
 - Theme colors only fill missing segment colors. If a segment already has `color`, that value wins.
-- There is no persistence layer at the moment, so refreshing the page resets the current wheel state.
+- The configuration list is sorted alphabetically by segment label.
+
+## Example Files
+
+- `examples/zdf.json`: team picker example with images
+- `examples/food-picks.json`: food chooser example
+- `examples/next-james-bond.json`: Bond casting example with `icon: null` placeholders for actor images
 
 ## Project Structure
 
@@ -169,3 +214,7 @@ src/
 - `npm run dev` / `yarn dev`: start the Vite dev server
 - `npm run build` / `yarn build`: create a production build in `dist/`
 - `npm run preview` / `yarn preview`: preview the production build locally
+- `npm run docker:build`: build the Docker image with Docker Compose
+- `npm run docker:up`: build and start the app container in the background
+- `npm run docker:down`: stop and remove the app container
+- `npm run docker:logs`: stream logs from the running app container
