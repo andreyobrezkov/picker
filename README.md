@@ -1,6 +1,6 @@
 # Picker
 
-Picker is a small React + Vite app for running a spin-the-wheel selection flow. You can load entries from JSON, add entries manually in the UI, assign weights and colors, persist the picker state locally, and pick a winner with an animated canvas wheel.
+Picker is a small React + Vite app for running a spin-the-wheel selection flow. You can load entries from JSON, add, edit, and remove entries in the UI, assign weights and colors, persist the picker state locally, and pick a winner with an animated canvas wheel.
 
 ![Picker UI](./ui.png)
 
@@ -9,12 +9,14 @@ Picker is a small React + Vite app for running a spin-the-wheel selection flow. 
 - Spins a weighted wheel and returns a winner in a modal
 - Imports segments from a JSON file by upload or drag and drop
 - Lets you add segments manually from the configuration panel
+- Lets you edit existing segments directly in the configuration panel
 - Supports optional subtitle, emoji, image URL, custom color, and weight per segment
 - Includes switchable wheel color themes
 - Can automatically disable a winner after each spin
 - Persists upload-compatible picker state in local storage
 - Downloads the current picker state as reusable JSON
 - Shows segments alphabetically in the configuration list
+- Switches the segment list to two columns when more than 8 entries are present
 - Starts with a built-in sample list so the app is usable immediately
 
 ## Tech Stack
@@ -105,10 +107,11 @@ The app will be available at `http://localhost:4173`.
    - uploading a JSON file,
    - dragging a JSON file into the page,
    - or adding segments manually.
-3. Use `Download current JSON` to export the current picker state for later re-upload.
-4. Optionally enable `Remove after win` if winners should be disabled after selection.
-5. Open `Settings` to choose a wheel palette and spin speed.
-6. Press `SPIN`.
+3. Use the header actions to upload JSON or download the current picker state for later re-upload.
+4. Edit, enable/disable, or delete segments from the configuration list.
+5. Optionally enable `Remove after win` if winners should be disabled after selection.
+6. Open `Settings` to choose a wheel palette and spin speed.
+7. Press `SPIN`.
 
 ## JSON Format
 
@@ -185,6 +188,7 @@ The preferred upload format is a root object with picker-level settings plus a `
 - Remote avatar/image URLs should allow cross-origin loading, otherwise the wheel will render the segment without the image.
 - Theme colors only fill missing segment colors. If a segment already has `color`, that value wins.
 - The configuration list is sorted alphabetically by segment label.
+- When the list grows beyond 8 segments, the configuration panel switches to a two-column layout on wider screens.
 
 ## Example Files
 
