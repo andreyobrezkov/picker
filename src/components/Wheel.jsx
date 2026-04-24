@@ -66,7 +66,7 @@ function drawSegmentContent(ctx, seg, midR, r, images) {
     textY = emojiSize * 0.55
   }
 
-  const fontSize = Math.max(10, Math.min(13, midR * seg.arc * 0.13))
+  const fontSize = Math.max(12, Math.min(16, midR * seg.arc * 0.16))
   ctx.font = `700 ${fontSize}px 'Spline Sans', system-ui, sans-serif`
   ctx.fillStyle = '#fff'
   ctx.textAlign = 'center'

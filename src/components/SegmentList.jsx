@@ -13,6 +13,7 @@ export default function SegmentList({
   const labelRef = useRef(null)
 
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }))
+  const useTwoColumns = segments.length > 8
 
   const openForm = () => {
     setShowForm(true)
@@ -72,7 +73,7 @@ export default function SegmentList({
       <p className={styles.sectionLabel}>Current segments</p>
 
       {/* Segment list */}
-      <ul className={styles.list}>
+      <ul className={`${styles.list} ${useTwoColumns ? styles.listTwoColumns : ''}`}>
         {sortedSegments.map((seg) => (
           <li key={seg.id} className={`${styles.item} ${!seg.enabled ? styles.itemDisabled : ''}`}>
             {seg.icon ? (

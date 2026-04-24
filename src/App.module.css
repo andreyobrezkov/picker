@@ -68,7 +68,7 @@
 .main {
   flex: 1;
   padding: 96px 40px 80px;
-  max-width: 1400px;
+  max-width: 1560px;
   margin: 0 auto;
   width: 100%;
   position: relative;
@@ -116,7 +116,7 @@
 /* ── Grid ── */
 .grid {
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: minmax(0, 1fr) 560px;
   gap: 32px;
   align-items: start;
 }
