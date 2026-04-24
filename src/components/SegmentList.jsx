@@ -5,10 +5,11 @@ const EMPTY = { label: '', subtitle: '', icon: '', useColor: false, customColor:
 
 export default function SegmentList({
   segments, removeAfterWin, onToggleRemoveAfterWin,
-  onDelete, onToggleEnabled, onUpload, onDownloadExample, onAdd,
+  onDelete, onUpdate, onToggleEnabled, onUpload, onDownloadExample, onAdd,
 }) {
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(EMPTY)
+  const [editingId, setEditingId] = useState(null)
   const [error, setError] = useState('')
   const labelRef = useRef(null)
 
@@ -17,24 +18,47 @@ export default function SegmentList({
 
   const openForm = () => {
     setShowForm(true)
+    setEditingId(null)
+    setForm(EMPTY)
     setError('')
     setTimeout(() => labelRef.current?.focus(), 50)
   }
 
-  const cancel = () => { setForm(EMPTY); setShowForm(false); setError('') }
+  const openEditForm = (segment) => {
+    setShowForm(true)
+    setEditingId(segment.id)
+    setForm({
+      label: segment.label,
+      subtitle: segment.subtitle ?? '',
+      icon: segment.icon ?? '',
+      useColor: Boolean(segment.color),
+      customColor: segment.color ?? '#b51c00',
+      weight: segment.weight ?? 1,
+    })
+    setError('')
+    setTimeout(() => labelRef.current?.focus(), 50)
+  }
+
+  const cancel = () => { setForm(EMPTY); setEditingId(null); setShowForm(false); setError('') }
   const sortedSegments = [...segments].sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!form.label.trim()) { setError('Name is required.'); return }
-    onAdd({
+    const payload = {
       label: form.label.trim(),
       subtitle: form.subtitle.trim(),
       icon: form.icon.trim() || null,
       color: form.useColor ? form.customColor : null,
       weight: Math.max(0.1, parseFloat(form.weight) || 1),
-    })
+    }
+    if (editingId) {
+      onUpdate(editingId, payload)
+    } else {
+      onAdd(payload)
+    }
     setForm(EMPTY)
+    setEditingId(null)
     setShowForm(false)
     setError('')
   }
@@ -44,15 +68,20 @@ export default function SegmentList({
       {/* Header */}
       <div className={styles.header}>
         <h2 className={styles.title}>Configuration</h2>
-        <label className={styles.uploadBtn}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
-          Upload JSON
-          <input type="file" accept=".json,application/json" onChange={onUpload} style={{ display: 'none' }} />
-        </label>
+        <div className={styles.headerActions}>
+          <label className={styles.uploadBtn}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            Upload JSON
+            <input type="file" accept=".json,application/json" onChange={onUpload} style={{ display: 'none' }} />
+          </label>
+          <button className={styles.downloadBtn} onClick={onDownloadExample}>
+            Download current JSON
+          </button>
+        </div>
       </div>
 
       {/* Remove-after-win toggle */}
@@ -90,6 +119,12 @@ export default function SegmentList({
               {seg.subtitle && <span className={styles.subtitle}>{seg.subtitle}</span>}
             </div>
             <div className={styles.actions}>
+              <button className={styles.editBtn} onClick={() => openEditForm(seg)} title="Edit segment">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 20h9"/>
+                  <path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4z"/>
+                </svg>
+              </button>
               <button
                 role="switch" aria-checked={seg.enabled}
                 className={`${styles.toggle} ${seg.enabled ? styles.toggleOn : ''}`}
@@ -114,7 +149,7 @@ export default function SegmentList({
       {/* Add segment — button or inline form */}
       {showForm ? (
         <form className={styles.addForm} onSubmit={handleSubmit} noValidate>
-          <p className={styles.addFormTitle}>New segment</p>
+          <p className={styles.addFormTitle}>{editingId ? 'Edit segment' : 'New segment'}</p>
 
           {error && <p className={styles.addError}>{error}</p>}
 
@@ -197,7 +232,7 @@ export default function SegmentList({
 
           <div className={styles.addFormActions}>
             <button type="button" className={styles.cancelBtn} onClick={cancel}>Cancel</button>
-            <button type="submit" className={styles.submitBtn}>Add segment</button>
+            <button type="submit" className={styles.submitBtn}>{editingId ? 'Save changes' : 'Add segment'}</button>
           </div>
         </form>
       ) : (
@@ -208,11 +243,6 @@ export default function SegmentList({
           Add Segment
         </button>
       )}
-
-      {/* Footer */}
-      <button className={styles.exampleBtn} onClick={onDownloadExample}>
-        Download current JSON
-      </button>
     </section>
   )
 }

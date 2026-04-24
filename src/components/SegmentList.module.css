@@ -18,6 +18,14 @@
   gap: 12px;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .title {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 20px;
@@ -45,6 +53,24 @@
 
 .uploadBtn:hover { opacity: 0.88; }
 .uploadBtn:active { transform: scale(0.95); }
+
+.downloadBtn {
+  border: 1.5px solid var(--outline-variant);
+  background: #fff;
+  color: var(--on-surface);
+  border-radius: var(--radius-full);
+  padding: 8px 14px;
+  font-family: 'Spline Sans', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.downloadBtn:hover {
+  border-color: var(--outline);
+  background: var(--surface-container);
+}
 
 /* Remove-after-win toggle row */
 .removeToggleRow {
@@ -192,6 +218,25 @@
   justify-content: center;
   transition: color 0.15s, background 0.15s;
   padding: 0;
+}
+
+.editBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--outline-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
+  padding: 0;
+}
+
+.editBtn:hover {
+  color: var(--primary);
+  background: rgba(181,28,0,0.08);
 }
 
 .deleteBtn:hover {
@@ -414,26 +459,6 @@
 }
 .submitBtn:hover { opacity: 0.88; }
 .submitBtn:active { transform: scale(0.96); }
-
-/* ── Download example ── */
-.exampleBtn {
-  background: transparent;
-  border: 2px dashed var(--outline-variant);
-  color: var(--on-surface-variant);
-  border-radius: var(--radius-xl);
-  padding: 12px;
-  font-family: 'Spline Sans', system-ui, sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  width: 100%;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
-}
-
-.exampleBtn:hover {
-  border-color: var(--outline);
-  color: var(--on-surface);
-  background: var(--surface-container);
-}
 
 .tip {
   display: flex;

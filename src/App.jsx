@@ -151,6 +151,17 @@ export default function App() {
     }])
   }, [])
 
+  const handleUpdate = useCallback((id, data) => {
+    setSegments(prev => prev.map(seg => (
+      seg.id === id
+        ? {
+            ...seg,
+            ...data,
+          }
+        : seg
+    )))
+  }, [])
+
   const handleDelete = useCallback((id) => {
     setSegments(prev => prev.filter(s => s.id !== id))
   }, [])
@@ -266,6 +277,7 @@ export default function App() {
                 removeAfterWin={removeAfterWin}
                 onToggleRemoveAfterWin={() => setRemoveAfterWin(v => !v)}
                 onDelete={handleDelete}
+                onUpdate={handleUpdate}
                 onToggleEnabled={handleToggleEnabled}
                 onUpload={handleUpload}
                 onDownloadExample={downloadExample}
