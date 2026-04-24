@@ -112,6 +112,36 @@
   padding: 0 2px;
 }
 
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.editModeBtn {
+  border: 1.5px solid var(--outline-variant);
+  background: #fff;
+  color: var(--on-surface-variant);
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  font-family: 'Spline Sans', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.editModeBtn:hover {
+  border-color: var(--outline);
+  color: var(--on-surface);
+}
+
+.editModeBtnActive {
+  border-color: var(--primary);
+  background: rgba(181,28,0,0.08);
+  color: var(--primary);
+}
+
 .list {
   list-style: none;
   display: flex;
@@ -202,7 +232,7 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 

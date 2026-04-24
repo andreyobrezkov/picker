@@ -9,7 +9,7 @@ Picker is a small React + Vite app for running a spin-the-wheel selection flow. 
 - Spins a weighted wheel and returns a winner in a modal
 - Imports segments from a JSON file by upload or drag and drop
 - Lets you add segments manually from the configuration panel
-- Lets you edit existing segments directly in the configuration panel
+- Lets you toggle an `Edit` mode in the configuration panel to show segment edit and delete actions
 - Supports optional subtitle, emoji, image URL, custom color, and weight per segment
 - Includes switchable wheel color themes
 - Can automatically disable a winner after each spin
@@ -108,10 +108,11 @@ The app will be available at `http://localhost:4173`.
    - dragging a JSON file into the page,
    - or adding segments manually.
 3. Use the header actions to upload JSON or download the current picker state for later re-upload.
-4. Edit, enable/disable, or delete segments from the configuration list.
-5. Optionally enable `Remove after win` if winners should be disabled after selection.
-6. Open `Settings` to choose a wheel palette and spin speed.
-7. Press `SPIN`.
+4. Use the `Edit` toggle above the segment list to show or hide the edit and delete buttons.
+5. When `Edit` is off, use the per-segment switch to enable or disable entries.
+6. Optionally enable `Remove after win` if winners should be disabled after selection.
+7. Open `Settings` to choose a wheel palette and spin speed.
+8. Press `SPIN`.
 
 ## JSON Format
 
@@ -188,6 +189,7 @@ The preferred upload format is a root object with picker-level settings plus a `
 - Remote avatar/image URLs should allow cross-origin loading, otherwise the wheel will render the segment without the image.
 - Theme colors only fill missing segment colors. If a segment already has `color`, that value wins.
 - The configuration list is sorted alphabetically by segment label.
+- The `Edit` toggle switches each row between edit/delete actions and the enable/disable switch to keep more space available for labels.
 - When the list grows beyond 8 segments, the configuration panel switches to a two-column layout on wider screens.
 
 ## Example Files

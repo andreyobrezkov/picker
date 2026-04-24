@@ -8,6 +8,7 @@ export default function SegmentList({
   onDelete, onUpdate, onToggleEnabled, onUpload, onDownloadExample, onAdd,
 }) {
   const [showForm, setShowForm] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
   const [form, setForm] = useState(EMPTY)
   const [editingId, setEditingId] = useState(null)
   const [error, setError] = useState('')
@@ -99,7 +100,17 @@ export default function SegmentList({
         </button>
       </div>
 
-      <p className={styles.sectionLabel}>Current segments</p>
+      <div className={styles.sectionHeader}>
+        <p className={styles.sectionLabel}>Current segments</p>
+        <button
+          type="button"
+          className={`${styles.editModeBtn} ${isEditMode ? styles.editModeBtnActive : ''}`}
+          aria-pressed={isEditMode}
+          onClick={() => setIsEditMode(prev => !prev)}
+        >
+          Edit
+        </button>
+      </div>
 
       {/* Segment list */}
       <ul className={`${styles.list} ${useTwoColumns ? styles.listTwoColumns : ''}`}>
@@ -119,28 +130,33 @@ export default function SegmentList({
               {seg.subtitle && <span className={styles.subtitle}>{seg.subtitle}</span>}
             </div>
             <div className={styles.actions}>
-              <button className={styles.editBtn} onClick={() => openEditForm(seg)} title="Edit segment">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 20h9"/>
-                  <path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4z"/>
-                </svg>
-              </button>
-              <button
-                role="switch" aria-checked={seg.enabled}
-                className={`${styles.toggle} ${seg.enabled ? styles.toggleOn : ''}`}
-                onClick={() => onToggleEnabled(seg.id)}
-                title={seg.enabled ? 'Disable segment' : 'Enable segment'}
-              >
-                <span className={styles.toggleThumb} />
-              </button>
-              <button className={styles.deleteBtn} onClick={() => onDelete(seg.id)} title="Delete segment">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="3 6 5 6 21 6"/>
-                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                  <path d="M10 11v6M14 11v6"/>
-                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                </svg>
-              </button>
+              {isEditMode ? (
+                <>
+                  <button className={styles.editBtn} onClick={() => openEditForm(seg)} title="Edit segment">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 20h9"/>
+                      <path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4z"/>
+                    </svg>
+                  </button>
+                  <button className={styles.deleteBtn} onClick={() => onDelete(seg.id)} title="Delete segment">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6"/>
+                      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                      <path d="M10 11v6M14 11v6"/>
+                      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                    </svg>
+                  </button>
+                </>
+              ) : (
+                <button
+                  role="switch" aria-checked={seg.enabled}
+                  className={`${styles.toggle} ${seg.enabled ? styles.toggleOn : ''}`}
+                  onClick={() => onToggleEnabled(seg.id)}
+                  title={seg.enabled ? 'Disable segment' : 'Enable segment'}
+                >
+                  <span className={styles.toggleThumb} />
+                </button>
+              )}
             </div>
           </li>
         ))}
